@@ -1,4 +1,4 @@
-import { Sun, Moon, Sunset, ChevronDown, Sparkles, ChevronRight, Play, Zap } from 'lucide-react';
+import { Sun, Moon, Sunset, ChevronDown, Sparkles, ChevronRight, Play, Zap, Layers } from 'lucide-react';
 import { user, todayMetrics } from '@/data/mockData';
 import type { ImportantItem } from '@/data/mockData';
 import { Card, Eyebrow } from '@/components/UI/Card';
@@ -6,6 +6,7 @@ import { MetricCard } from '@/components/UI/MetricCard';
 import { RingProgress, Sparkline } from '@/components/UI/Charts';
 import { ActiveWorkBoard } from './ActiveWorkBoard';
 import { useBoardColumns, useTopPriorities, useTasksDue } from '@/store/adapters';
+import { useUiStore } from '@/store/useUiStore';
 
 function greeting() {
   const h = new Date().getHours();
@@ -52,6 +53,7 @@ export function TodayView({ onStartFocus }: { onStartFocus?: () => void }) {
   const columns = useBoardColumns();
   const priorities = useTopPriorities(3);
   const tasksDue = useTasksDue();
+  const openTriage = useUiStore((s) => s.openTriage);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -64,11 +66,19 @@ export function TodayView({ onStartFocus }: { onStartFocus?: () => void }) {
           </h1>
           <p className="mt-1 text-sm text-text2">Let’s execute what matters today.</p>
         </div>
-        <button className="flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-text2 transition-colors hover:border-border2 hover:text-text">
-          <Sparkles size={15} className="text-brand" />
-          AI Chief of Staff
-          <ChevronDown size={14} className="text-text3" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={openTriage}
+            className="flex items-center gap-2 rounded-md bg-brand px-3 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-brand-d"
+          >
+            <Layers size={15} /> Triage Today
+          </button>
+          <button className="flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-text2 transition-colors hover:border-border2 hover:text-text">
+            <Sparkles size={15} className="text-brand" />
+            AI Chief of Staff
+            <ChevronDown size={14} className="text-text3" />
+          </button>
+        </div>
       </div>
 
       {/* Metric row */}

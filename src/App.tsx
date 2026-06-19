@@ -10,6 +10,7 @@ import { InsightsView } from '@/components/Insights/InsightsView';
 import { CalendarView } from '@/components/Calendar/CalendarView';
 import { AIAssistant } from '@/components/AI/AIAssistant';
 import { FocusMode } from '@/components/Focus/FocusMode';
+import { TriageMode } from '@/components/Triage/TriageMode';
 import { CommandPalette } from '@/components/CommandPalette';
 import { CardDetailModal } from '@/components/Cards/CardDetailModal';
 import { Toaster } from '@/components/UI/Toaster';
@@ -21,9 +22,12 @@ import { MobileMore } from '@/components/Mobile/MobileMore';
 import { personalNav } from '@/data/mockData';
 import type { ScreenId } from '@/data/mockData';
 import { useAppStore } from '@/store/useAppStore';
+import { useUiStore } from '@/store/useUiStore';
 
 export default function App() {
   const initStore = useAppStore((s) => s.init);
+  const triageOpen = useUiStore((s) => s.triageOpen);
+  const closeTriage = useUiStore((s) => s.closeTriage);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [screen, setScreen] = useState<ScreenId>('today');
   const [focusActive, setFocusActive] = useState(false);
@@ -99,6 +103,9 @@ export default function App() {
     <div className="h-screen bg-bg font-sans text-text">
       {/* Focus Mode takes over the whole screen */}
       <AnimatePresence>{focusActive && <FocusMode onEnd={() => setFocusActive(false)} />}</AnimatePresence>
+
+      {/* Triage Mode takes over the whole screen */}
+      <AnimatePresence>{triageOpen && <TriageMode onClose={closeTriage} />}</AnimatePresence>
 
       {/* ─── Desktop ─── */}
       <div className="hidden h-screen lg:flex">

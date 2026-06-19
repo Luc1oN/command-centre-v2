@@ -17,6 +17,10 @@ interface UiState {
   openTask: (id: string) => void;
   closeTask: () => void;
 
+  triageOpen: boolean;
+  openTriage: () => void;
+  closeTriage: () => void;
+
   toast: Toast | null;
   showToast: (t: Toast) => void;
   hideToast: () => void;
@@ -26,6 +30,10 @@ export const useUiStore = create<UiState>((set) => ({
   openTaskId: null,
   openTask: (id) => set({ openTaskId: id }),
   closeTask: () => set({ openTaskId: null }),
+
+  triageOpen: false,
+  openTriage: () => set({ triageOpen: true }),
+  closeTriage: () => set({ triageOpen: false }),
 
   toast: null,
   showToast: (toast) => set({ toast }),

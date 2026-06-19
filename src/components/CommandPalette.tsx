@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Play, CornerDownLeft } from 'lucide-react';
+import { Search, Play, Layers, CornerDownLeft } from 'lucide-react';
 import { primaryNav, personalNav } from '@/data/mockData';
 import type { ScreenId } from '@/data/mockData';
 import type { LucideIcon } from 'lucide-react';
+import { useUiStore } from '@/store/useUiStore';
 
 interface Command {
   id: string;
@@ -23,6 +24,7 @@ interface Props {
 export function CommandPalette({ open, onClose, onNavigate, onStartFocus }: Props) {
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
+  const openTriage = useUiStore((s) => s.openTriage);
 
   const commands = useMemo<Command[]>(() => {
     const go = (id: ScreenId) => () => {
@@ -31,10 +33,11 @@ export function CommandPalette({ open, onClose, onNavigate, onStartFocus }: Prop
     };
     return [
       { id: 'focus-start', label: 'Start Focus Session', group: 'Actions', icon: Play, run: () => { onStartFocus(); onClose(); } },
+      { id: 'triage', label: 'Triage Today', group: 'Actions', icon: Layers, run: () => { openTriage(); onClose(); } },
       ...primaryNav.map((n) => ({ id: n.id, label: `Go to ${n.label}`, group: 'Navigate', icon: n.icon, run: go(n.id) })),
       ...personalNav.map((n) => ({ id: n.id, label: `Go to ${n.label}`, group: 'Personal', icon: n.icon, run: go(n.id) })),
     ];
-  }, [onNavigate, onClose, onStartFocus]);
+  }, [onNavigate, onClose, onStartFocus, openTriage]);
 
   const filtered = useMemo(
     () => commands.filter((c) => c.label.toLowerCase().includes(query.toLowerCase())),
