@@ -8,7 +8,7 @@ import {
   useSensors,
   useDraggable,
   useDroppable,
-  closestCorners,
+  pointerWithin,
 } from '@dnd-kit/core';
 import type { DragStartEvent, DragEndEvent } from '@dnd-kit/core';
 import { workBoard } from '@/data/mockData';
@@ -190,7 +190,7 @@ export function ActiveWorkBoard({ columns = workBoard, title = 'Active Work Boar
           </button>
         </div>
       </div>
-      <DndContext sensors={sensors} collisionDetection={closestCorners} onDragStart={onDragStart} onDragEnd={onDragEnd}>
+      <DndContext sensors={sensors} collisionDetection={pointerWithin} onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <div className="flex gap-4 overflow-x-auto pb-1">
           {columns.map((col) => (
             <Column key={col.id} column={col} limit={limitPerColumn} onToggle={toggleTask} onAdd={(c, t) => addTask({ text: t, bucketId: c })} />
