@@ -1,18 +1,19 @@
 import { motion } from 'framer-motion';
-import { Target, BarChart3, Sparkles, Sun, Moon, X } from 'lucide-react';
+import { Target, BarChart3, Sparkles, Settings, Sun, Moon, X } from 'lucide-react';
 import { personalNav } from '@/data/mockData';
 import type { ScreenId } from '@/data/mockData';
 import type { LucideIcon } from 'lucide-react';
+import { useUiStore } from '@/store/useUiStore';
 
 interface Props {
   onClose: () => void;
   onNavigate: (id: ScreenId) => void;
   onStartFocus: () => void;
-  theme: 'dark' | 'light';
-  onToggleTheme: () => void;
 }
 
-export function MobileMore({ onClose, onNavigate, onStartFocus, theme, onToggleTheme }: Props) {
+export function MobileMore({ onClose, onNavigate, onStartFocus }: Props) {
+  const theme = useUiStore((s) => s.theme);
+  const onToggleTheme = useUiStore((s) => s.toggleTheme);
   const quick: { id: ScreenId; label: string; icon: LucideIcon }[] = [
     { id: 'insights', label: 'Insights', icon: BarChart3 },
     { id: 'ai', label: 'AI Assistant', icon: Sparkles },
@@ -58,6 +59,7 @@ export function MobileMore({ onClose, onNavigate, onStartFocus, theme, onToggleT
         ))}
 
         <div className="my-2 border-t border-border" />
+        <Item icon={Settings} label="Settings" onClick={() => { onNavigate('settings'); onClose(); }} />
         <Item icon={theme === 'dark' ? Sun : Moon} label={theme === 'dark' ? 'Light mode' : 'Dark mode'} onClick={onToggleTheme} />
       </motion.div>
     </div>

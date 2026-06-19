@@ -3,12 +3,14 @@ import { Sparkles, ArrowUpRight, ArrowDownRight, ChevronRight, AlertCircle } fro
 import { intelligence } from '@/data/mockData';
 import { Eyebrow } from '@/components/UI/Card';
 import { Sparkline, MiniBars, RingProgress } from '@/components/UI/Charts';
+import { useUiStore } from '@/store/useUiStore';
 
 function Row({ children }: { children: ReactNode }) {
   return <div className="border-t border-border px-4 py-3.5 first:border-t-0">{children}</div>;
 }
 
 export function IntelligenceRail() {
+  const navigate = useUiStore((s) => s.navigate);
   const { weeklyCompletion: wc, projectsOnTrack: pt, focusTimeWtd: ft, meetingsTrend: mt, overdueTasks, aiInsight } =
     intelligence;
 
@@ -83,7 +85,7 @@ export function IntelligenceRail() {
       </Row>
 
       <Row>
-        <button className="flex w-full items-center justify-between">
+        <button onClick={() => navigate('tasks')} className="flex w-full items-center justify-between">
           <span className="flex items-center gap-2 text-xs text-text2">
             <AlertCircle size={14} className="text-amber" />
             Overdue tasks
@@ -102,7 +104,10 @@ export function IntelligenceRail() {
           <Eyebrow className="text-brand/80">AI Insight</Eyebrow>
         </div>
         <p className="text-xs leading-relaxed text-text2">{aiInsight}</p>
-        <button className="mt-2.5 inline-flex items-center gap-1 text-xs font-medium text-brand hover:gap-1.5 transition-all">
+        <button
+          onClick={() => navigate('insights')}
+          className="mt-2.5 inline-flex items-center gap-1 text-xs font-medium text-brand transition-all hover:gap-1.5"
+        >
           View all insights <ChevronRight size={13} />
         </button>
       </div>

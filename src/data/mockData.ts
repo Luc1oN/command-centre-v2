@@ -30,6 +30,7 @@ export type ScreenId =
   | 'calendar'
   | 'insights'
   | 'ai'
+  | 'settings'
   | 'health'
   | 'tennis'
   | 'finance'

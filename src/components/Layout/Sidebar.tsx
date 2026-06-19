@@ -1,12 +1,11 @@
 import { Command, Settings, Sun, Moon } from 'lucide-react';
 import { primaryNav, personalNav, user } from '@/data/mockData';
 import type { ScreenId, NavItem } from '@/data/mockData';
+import { useUiStore } from '@/store/useUiStore';
 
 interface SidebarProps {
   current: ScreenId;
   onNavigate: (id: ScreenId) => void;
-  theme: 'dark' | 'light';
-  onToggleTheme: () => void;
 }
 
 function NavButton({ item, active, onClick }: { item: NavItem; active: boolean; onClick: () => void }) {
@@ -26,7 +25,9 @@ function NavButton({ item, active, onClick }: { item: NavItem; active: boolean; 
   );
 }
 
-export function Sidebar({ current, onNavigate, theme, onToggleTheme }: SidebarProps) {
+export function Sidebar({ current, onNavigate }: SidebarProps) {
+  const theme = useUiStore((s) => s.theme);
+  const onToggleTheme = useUiStore((s) => s.toggleTheme);
   return (
     <aside className="flex h-full w-[232px] shrink-0 flex-col border-r border-border bg-surface/60 backdrop-blur-sm">
       {/* Brand */}
@@ -38,7 +39,10 @@ export function Sidebar({ current, onNavigate, theme, onToggleTheme }: SidebarPr
       </div>
 
       {/* User */}
-      <button className="mx-3 mb-2 flex items-center gap-2.5 rounded-sm px-1.5 py-1.5 text-left transition-colors hover:bg-surface2">
+      <button
+        onClick={() => onNavigate('settings')}
+        className="mx-3 mb-2 flex items-center gap-2.5 rounded-sm px-1.5 py-1.5 text-left transition-colors hover:bg-surface2"
+      >
         <span className="grid size-8 place-items-center rounded-full bg-gradient-to-br from-purple to-brand text-2xs font-semibold text-white">
           {user.initials}
         </span>
@@ -67,8 +71,13 @@ export function Sidebar({ current, onNavigate, theme, onToggleTheme }: SidebarPr
 
       {/* Footer */}
       <div className="flex items-center justify-between gap-2 border-t border-border px-3 py-3">
-        <button className="flex items-center gap-2.5 rounded-sm px-2.5 py-1.5 text-sm text-text2 transition-colors hover:bg-surface2 hover:text-text">
-          <Settings size={16} className="text-text3" />
+        <button
+          onClick={() => onNavigate('settings')}
+          className={`flex items-center gap-2.5 rounded-sm px-2.5 py-1.5 text-sm transition-colors hover:bg-surface2 hover:text-text ${
+            current === 'settings' ? 'text-text' : 'text-text2'
+          }`}
+        >
+          <Settings size={16} className={current === 'settings' ? 'text-brand' : 'text-text3'} />
           Settings
         </button>
         <button

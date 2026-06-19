@@ -140,7 +140,10 @@ export function TodayView({ onStartFocus, onNavigate }: { onStartFocus?: () => v
               priorities.map((item) => <ImportantRow key={item.rank} item={item} onFocus={onStartFocus} />)
             )}
           </div>
-          <button className="mt-auto inline-flex items-center gap-1 pt-3 text-xs font-medium text-brand hover:gap-1.5 transition-all">
+          <button
+            onClick={() => onNavigate?.('tasks')}
+            className="mt-auto inline-flex items-center gap-1 pt-3 text-xs font-medium text-brand transition-all hover:gap-1.5"
+          >
             View all my tasks <ChevronRight size={13} />
           </button>
         </Card>

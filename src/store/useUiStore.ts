@@ -1,10 +1,12 @@
 // ════════════════════════════════════════════════════════════
 //  UI store — ephemeral interface state (not persisted).
-//  Keeps the open card modal + toast at the app root so any
-//  component can trigger them without prop threading.
+//  Holds the open card modal, triage flag, toast, theme, and a
+//  navigate fn (registered by App) so deep components can route
+//  and theme without prop threading.
 // ════════════════════════════════════════════════════════════
 
 import { create } from 'zustand';
+import type { ScreenId } from '@/data/mockData';
 
 export interface Toast {
   message: string;
@@ -24,6 +26,12 @@ interface UiState {
   toast: Toast | null;
   showToast: (t: Toast) => void;
   hideToast: () => void;
+
+  theme: 'dark' | 'light';
+  toggleTheme: () => void;
+
+  /** Set by App on mount; lets any component route. */
+  navigate: (id: ScreenId) => void;
 }
 
 export const useUiStore = create<UiState>((set) => ({
@@ -38,4 +46,9 @@ export const useUiStore = create<UiState>((set) => ({
   toast: null,
   showToast: (toast) => set({ toast }),
   hideToast: () => set({ toast: null }),
+
+  theme: 'dark',
+  toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
+
+  navigate: () => {},
 }));

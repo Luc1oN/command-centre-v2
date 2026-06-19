@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Check, Clock, MoreHorizontal, ChevronRight } from 'lucide-react';
+import { Plus, Check, Clock, ChevronRight } from 'lucide-react';
 import {
   DndContext,
   DragOverlay,
@@ -164,6 +164,7 @@ export function ActiveWorkBoard({ columns = workBoard, title = 'Active Work Boar
   const toggleTask = useAppStore((s) => s.toggleTask);
   const addTask = useAppStore((s) => s.addTask);
   const moveTask = useAppStore((s) => s.moveTask);
+  const navigate = useUiStore((s) => s.navigate);
   const [active, setActive] = useState<BoardCard | null>(null);
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
@@ -184,14 +185,12 @@ export function ActiveWorkBoard({ columns = workBoard, title = 'Active Work Boar
     <div className="rounded-lg border border-border bg-surface/60 p-4">
       <div className="mb-4 flex items-center justify-between">
         <Eyebrow>{title}</Eyebrow>
-        <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-1 text-xs font-medium text-brand transition-all hover:gap-1.5">
-            View all tasks <ChevronRight size={13} />
-          </button>
-          <button className="text-text3 hover:text-text2">
-            <MoreHorizontal size={16} />
-          </button>
-        </div>
+        <button
+          onClick={() => navigate('tasks')}
+          className="inline-flex items-center gap-1 text-xs font-medium text-brand transition-all hover:gap-1.5"
+        >
+          View all tasks <ChevronRight size={13} />
+        </button>
       </div>
       <DndContext sensors={sensors} collisionDetection={pointerWithin} onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <div className="flex gap-4 overflow-x-auto pb-1">
