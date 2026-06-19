@@ -1,6 +1,6 @@
 import { Sun, Moon, Sunset, ChevronDown, Sparkles, ChevronRight, Play, Zap, Layers } from 'lucide-react';
 import { user, todayMetrics } from '@/data/mockData';
-import type { ImportantItem } from '@/data/mockData';
+import type { ImportantItem, ScreenId } from '@/data/mockData';
 import { Card, Eyebrow } from '@/components/UI/Card';
 import { MetricCard } from '@/components/UI/MetricCard';
 import { RingProgress, Sparkline } from '@/components/UI/Charts';
@@ -48,7 +48,7 @@ function ImportantRow({ item, onFocus }: { item: ImportantItem; onFocus?: () => 
   );
 }
 
-export function TodayView({ onStartFocus }: { onStartFocus?: () => void }) {
+export function TodayView({ onStartFocus, onNavigate }: { onStartFocus?: () => void; onNavigate?: (id: ScreenId) => void }) {
   const { text: greet, Icon } = greeting();
   const columns = useBoardColumns();
   const priorities = useTopPriorities(3);
@@ -73,7 +73,10 @@ export function TodayView({ onStartFocus }: { onStartFocus?: () => void }) {
           >
             <Layers size={15} /> Triage Today
           </button>
-          <button className="flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-text2 transition-colors hover:border-border2 hover:text-text">
+          <button
+            onClick={() => onNavigate?.('ai')}
+            className="flex items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm text-text2 transition-colors hover:border-border2 hover:text-text"
+          >
             <Sparkles size={15} className="text-brand" />
             AI Chief of Staff
             <ChevronDown size={14} className="text-text3" />

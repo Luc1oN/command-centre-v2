@@ -70,7 +70,7 @@ export default function App() {
   const renderScreen = () => {
     switch (screen) {
       case 'today':
-        return <TodayView onStartFocus={startFocus} />;
+        return <TodayView onStartFocus={startFocus} onNavigate={navigate} />;
       case 'tasks':
         return <TasksView />;
       case 'projects':
@@ -83,7 +83,7 @@ export default function App() {
         return <AIAssistant />;
       default: {
         const item = personalNav.find((n) => n.id === screen);
-        return item ? <Placeholder icon={item.icon} title={item.label} /> : <TodayView onStartFocus={startFocus} />;
+        return item ? <Placeholder icon={item.icon} title={item.label} /> : <TodayView onStartFocus={startFocus} onNavigate={navigate} />;
       }
     }
   };
