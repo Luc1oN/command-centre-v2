@@ -16,6 +16,7 @@ import type { BoardCard, BoardColumn } from '@/data/mockData';
 import { PriorityChip, PRIORITY_ACCENT, Avatar } from '@/components/UI/Badges';
 import { Eyebrow } from '@/components/UI/Card';
 import { useAppStore } from '@/store/useAppStore';
+import { useUiStore } from '@/store/useUiStore';
 
 /** The visual face of a card — shared by static, draggable and overlay renders. */
 function CardFace({ card, onToggle }: { card: BoardCard; onToggle?: (id: string) => void }) {
@@ -63,6 +64,7 @@ function CardFace({ card, onToggle }: { card: BoardCard; onToggle?: (id: string)
 }
 
 function DraggableCard({ card, onToggle }: { card: BoardCard; onToggle: (id: string) => void }) {
+  const openTask = useUiStore((s) => s.openTask);
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: card.id,
     data: { columnId: card.column, card },
@@ -72,6 +74,7 @@ function DraggableCard({ card, onToggle }: { card: BoardCard; onToggle: (id: str
       ref={setNodeRef}
       {...attributes}
       {...listeners}
+      onClick={() => openTask(card.id)}
       className={`touch-none cursor-grab active:cursor-grabbing ${isDragging ? 'opacity-40' : ''}`}
     >
       <CardFace card={card} onToggle={onToggle} />

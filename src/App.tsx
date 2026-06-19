@@ -11,6 +11,8 @@ import { CalendarView } from '@/components/Calendar/CalendarView';
 import { AIAssistant } from '@/components/AI/AIAssistant';
 import { FocusMode } from '@/components/Focus/FocusMode';
 import { CommandPalette } from '@/components/CommandPalette';
+import { CardDetailModal } from '@/components/Cards/CardDetailModal';
+import { Toaster } from '@/components/UI/Toaster';
 import { Placeholder } from '@/components/UI/Placeholder';
 import { MobileHome } from '@/components/Mobile/MobileHome';
 import { BottomTabs } from '@/components/Mobile/BottomTabs';
@@ -136,6 +138,10 @@ export default function App() {
         onNavigate={navigate}
         onStartFocus={startFocus}
       />
+
+      {/* Card detail modal + toast (shared, app-root overlays) */}
+      <CardDetailModal />
+      <Toaster />
     </div>
   );
 }
