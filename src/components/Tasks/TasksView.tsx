@@ -1,7 +1,9 @@
 import { SlidersHorizontal, LayoutGrid } from 'lucide-react';
 import { ActiveWorkBoard } from '@/components/Today/ActiveWorkBoard';
+import { useBoardColumns } from '@/store/adapters';
 
 export function TasksView() {
+  const columns = useBoardColumns();
   return (
     <div className="mx-auto max-w-6xl">
       <div className="mb-4 flex items-center justify-between">
@@ -18,7 +20,7 @@ export function TasksView() {
           </button>
         </div>
       </div>
-      <ActiveWorkBoard title="All Tasks" />
+      <ActiveWorkBoard columns={columns} title="All Tasks" />
     </div>
   );
 }

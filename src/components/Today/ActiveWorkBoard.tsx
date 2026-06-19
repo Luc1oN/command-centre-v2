@@ -31,7 +31,9 @@ function TaskCard({ card }: { card: BoardCard }) {
   );
 }
 
-function Column({ column }: { column: BoardColumn }) {
+function Column({ column, limit }: { column: BoardColumn; limit?: number }) {
+  const cards = limit ? column.cards.slice(0, limit) : column.cards;
+  const hidden = column.cards.length - cards.length;
   return (
     <div className="flex min-w-[220px] flex-1 flex-col">
       <div className="mb-2 flex items-center justify-between px-1">
@@ -41,9 +43,10 @@ function Column({ column }: { column: BoardColumn }) {
         </span>
       </div>
       <div className="flex flex-col gap-2">
-        {column.cards.map((c) => (
+        {cards.map((c) => (
           <TaskCard key={c.id} card={c} />
         ))}
+        {hidden > 0 && <div className="px-1 py-0.5 text-2xs text-text3">+{hidden} more</div>}
         <button className="flex items-center gap-1.5 rounded-md border border-dashed border-border px-2.5 py-2 text-2xs font-medium text-text3 transition-colors hover:border-border2 hover:text-text2">
           <Plus size={13} /> Add task
         </button>
@@ -52,7 +55,13 @@ function Column({ column }: { column: BoardColumn }) {
   );
 }
 
-export function ActiveWorkBoard({ columns = workBoard, title = 'Active Work Board' }: { columns?: BoardColumn[]; title?: string }) {
+interface BoardProps {
+  columns?: BoardColumn[];
+  title?: string;
+  limitPerColumn?: number;
+}
+
+export function ActiveWorkBoard({ columns = workBoard, title = 'Active Work Board', limitPerColumn }: BoardProps) {
   return (
     <div className="rounded-lg border border-border bg-surface/60 p-4">
       <div className="mb-4 flex items-center justify-between">
@@ -68,7 +77,7 @@ export function ActiveWorkBoard({ columns = workBoard, title = 'Active Work Boar
       </div>
       <div className="flex gap-4 overflow-x-auto pb-1">
         {columns.map((col) => (
-          <Column key={col.id} column={col} />
+          <Column key={col.id} column={col} limit={limitPerColumn} />
         ))}
       </div>
     </div>

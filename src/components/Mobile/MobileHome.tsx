@@ -1,8 +1,9 @@
 import { Sun, Moon, Sunset, Bell, ChevronRight, Play } from 'lucide-react';
-import { user, todayMetrics, focusSession, mostImportantWork } from '@/data/mockData';
+import { user, todayMetrics, focusSession } from '@/data/mockData';
 import type { ImportantItem } from '@/data/mockData';
 import { Card, Eyebrow } from '@/components/UI/Card';
 import { RingProgress } from '@/components/UI/Charts';
+import { useTopPriorities, useTasksDue } from '@/store/adapters';
 
 function greeting() {
   const h = new Date().getHours();
@@ -25,6 +26,8 @@ function Stat({ label, value, sub, accent }: { label: string; value: string; sub
 
 export function MobileHome({ onStartFocus }: { onStartFocus: () => void }) {
   const { text: greet, Icon } = greeting();
+  const priorities = useTopPriorities(3);
+  const tasksDue = useTasksDue();
 
   return (
     <div className="flex flex-col gap-4 p-4 pb-24">
@@ -64,7 +67,7 @@ export function MobileHome({ onStartFocus }: { onStartFocus: () => void }) {
 
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-3">
-        <Stat label="Tasks Due" value={String(todayMetrics.tasksDue.value)} sub={`${todayMetrics.tasksDue.highPriority} high`} accent="text-text" />
+        <Stat label="Tasks Due" value={String(tasksDue.value)} sub={`${tasksDue.highPriority} high`} accent="text-text" />
         <Stat label="Meetings" value={String(todayMetrics.meetings.value)} sub="Today" />
         <Stat label="Focus Time" value={`${todayMetrics.focusTime.hours}h`} sub="Today" />
       </div>
@@ -73,7 +76,8 @@ export function MobileHome({ onStartFocus }: { onStartFocus: () => void }) {
       <Card className="p-4">
         <Eyebrow>Top Priorities</Eyebrow>
         <div className="mt-2 flex flex-col gap-0.5">
-          {mostImportantWork.map((item) => (
+          {priorities.length === 0 && <p className="py-4 text-center text-xs text-text3">Nothing urgent right now.</p>}
+          {priorities.map((item) => (
             <div key={item.rank} className="flex items-center gap-3 py-2">
               <span className="grid size-5 place-items-center rounded-full bg-surface3 text-2xs font-semibold text-text2">{item.rank}</span>
               <div className="min-w-0 flex-1">

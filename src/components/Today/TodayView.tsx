@@ -1,10 +1,11 @@
 import { Sun, Moon, Sunset, ChevronDown, Sparkles, ChevronRight, Play, Zap } from 'lucide-react';
-import { user, todayMetrics, mostImportantWork } from '@/data/mockData';
+import { user, todayMetrics } from '@/data/mockData';
 import type { ImportantItem } from '@/data/mockData';
 import { Card, Eyebrow } from '@/components/UI/Card';
 import { MetricCard } from '@/components/UI/MetricCard';
 import { RingProgress, Sparkline } from '@/components/UI/Charts';
 import { ActiveWorkBoard } from './ActiveWorkBoard';
+import { useBoardColumns, useTopPriorities, useTasksDue } from '@/store/adapters';
 
 function greeting() {
   const h = new Date().getHours();
@@ -48,6 +49,9 @@ function ImportantRow({ item, onFocus }: { item: ImportantItem; onFocus?: () => 
 
 export function TodayView({ onStartFocus }: { onStartFocus?: () => void }) {
   const { text: greet, Icon } = greeting();
+  const columns = useBoardColumns();
+  const priorities = useTopPriorities(3);
+  const tasksDue = useTasksDue();
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -78,8 +82,14 @@ export function TodayView({ onStartFocus }: { onStartFocus?: () => void }) {
         />
         <MetricCard
           label="Tasks Due"
-          value={todayMetrics.tasksDue.value}
-          sub={<span className="text-red">{todayMetrics.tasksDue.highPriority} high priority</span>}
+          value={tasksDue.value}
+          sub={
+            tasksDue.highPriority > 0 ? (
+              <span className="text-red">{tasksDue.highPriority} high priority</span>
+            ) : (
+              'due today / overdue'
+            )
+          }
         />
         <MetricCard label="Meetings" value={todayMetrics.meetings.value} sub={todayMetrics.meetings.label} />
         <MetricCard
@@ -111,9 +121,11 @@ export function TodayView({ onStartFocus }: { onStartFocus?: () => void }) {
             <Eyebrow>Most Important Work</Eyebrow>
           </div>
           <div className="flex flex-col gap-0.5">
-            {mostImportantWork.map((item) => (
-              <ImportantRow key={item.rank} item={item} onFocus={onStartFocus} />
-            ))}
+            {priorities.length === 0 ? (
+              <p className="px-2 py-6 text-center text-sm text-text3">Nothing urgent right now — you’re clear.</p>
+            ) : (
+              priorities.map((item) => <ImportantRow key={item.rank} item={item} onFocus={onStartFocus} />)
+            )}
           </div>
           <button className="mt-auto inline-flex items-center gap-1 pt-3 text-xs font-medium text-brand hover:gap-1.5 transition-all">
             View all my tasks <ChevronRight size={13} />
@@ -121,7 +133,7 @@ export function TodayView({ onStartFocus }: { onStartFocus?: () => void }) {
         </Card>
 
         {/* Board */}
-        <ActiveWorkBoard />
+        <ActiveWorkBoard columns={columns} limitPerColumn={6} />
       </div>
     </div>
   );

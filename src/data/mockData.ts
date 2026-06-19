@@ -103,7 +103,8 @@ export interface BoardCard {
   id: string;
   title: string;
   priority: Priority;
-  column: ColumnId;
+  // string (not ColumnId) so real Supabase bucket ids fit alongside mock data
+  column: string;
   date?: string;
   waitingOn?: number;
   assignees?: number;
@@ -111,7 +112,7 @@ export interface BoardCard {
 }
 
 export interface BoardColumn {
-  id: ColumnId;
+  id: string;
   title: string;
   cards: BoardCard[];
 }

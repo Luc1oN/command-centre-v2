@@ -18,13 +18,20 @@ import type { MobileTab } from '@/components/Mobile/BottomTabs';
 import { MobileMore } from '@/components/Mobile/MobileMore';
 import { personalNav } from '@/data/mockData';
 import type { ScreenId } from '@/data/mockData';
+import { useAppStore } from '@/store/useAppStore';
 
 export default function App() {
+  const initStore = useAppStore((s) => s.init);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [screen, setScreen] = useState<ScreenId>('today');
   const [focusActive, setFocusActive] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+
+  // Load real data from Supabase once on mount
+  useEffect(() => {
+    initStore();
+  }, [initStore]);
 
   // Apply theme class to <html>
   useEffect(() => {
