@@ -1,5 +1,5 @@
 import { Sun, Moon, Sunset, ChevronDown, Sparkles, ChevronRight, Play, Zap, Layers } from 'lucide-react';
-import { user, todayMetrics } from '@/data/mockData';
+import { todayMetrics } from '@/data/mockData';
 import type { ImportantItem, ScreenId } from '@/data/mockData';
 import { Card, Eyebrow } from '@/components/UI/Card';
 import { MetricCard } from '@/components/UI/MetricCard';
@@ -7,6 +7,7 @@ import { RingProgress, Sparkline } from '@/components/UI/Charts';
 import { ActiveWorkBoard } from './ActiveWorkBoard';
 import { useBoardColumns, useTopPriorities, useTasksDue } from '@/store/adapters';
 import { useUiStore } from '@/store/useUiStore';
+import { useProfileStore, firstNameOf } from '@/store/useProfileStore';
 
 function greeting() {
   const h = new Date().getHours();
@@ -54,6 +55,7 @@ export function TodayView({ onStartFocus, onNavigate }: { onStartFocus?: () => v
   const priorities = useTopPriorities(3);
   const tasksDue = useTasksDue();
   const openTriage = useUiStore((s) => s.openTriage);
+  const firstName = useProfileStore((s) => firstNameOf(s.fullName));
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -62,7 +64,7 @@ export function TodayView({ onStartFocus, onNavigate }: { onStartFocus?: () => v
         <div>
           <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-text">
             <Icon size={24} className="text-amber" />
-            {greet}, {user.firstName}
+            {greet}, {firstName}
           </h1>
           <p className="mt-1 text-sm text-text2">Let’s execute what matters today.</p>
         </div>

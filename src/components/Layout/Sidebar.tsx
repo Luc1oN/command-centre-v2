@@ -1,7 +1,8 @@
 import { Command, Settings, Sun, Moon } from 'lucide-react';
-import { primaryNav, personalNav, user } from '@/data/mockData';
+import { primaryNav, personalNav } from '@/data/mockData';
 import type { ScreenId, NavItem } from '@/data/mockData';
 import { useUiStore } from '@/store/useUiStore';
+import { useProfileStore, initialsOf } from '@/store/useProfileStore';
 
 interface SidebarProps {
   current: ScreenId;
@@ -28,6 +29,8 @@ function NavButton({ item, active, onClick }: { item: NavItem; active: boolean; 
 export function Sidebar({ current, onNavigate }: SidebarProps) {
   const theme = useUiStore((s) => s.theme);
   const onToggleTheme = useUiStore((s) => s.toggleTheme);
+  const fullName = useProfileStore((s) => s.fullName);
+  const role = useProfileStore((s) => s.role);
   return (
     <aside className="flex h-full w-[232px] shrink-0 flex-col border-r border-border bg-surface/60 backdrop-blur-sm">
       {/* Brand */}
@@ -44,11 +47,11 @@ export function Sidebar({ current, onNavigate }: SidebarProps) {
         className="mx-3 mb-2 flex items-center gap-2.5 rounded-sm px-1.5 py-1.5 text-left transition-colors hover:bg-surface2"
       >
         <span className="grid size-8 place-items-center rounded-full bg-gradient-to-br from-purple to-brand text-2xs font-semibold text-white">
-          {user.initials}
+          {initialsOf(fullName)}
         </span>
         <span className="min-w-0">
-          <span className="block truncate text-sm font-medium text-text">{user.fullName}</span>
-          <span className="block truncate text-2xs text-text3">{user.role}</span>
+          <span className="block truncate text-sm font-medium text-text">{fullName || 'Your name'}</span>
+          <span className="block truncate text-2xs text-text3">{role || 'Add a role'}</span>
         </span>
       </button>
 

@@ -1,10 +1,37 @@
 import type { ReactNode } from 'react';
 import { Sun, Moon, RefreshCw, Database, ExternalLink, Check } from 'lucide-react';
-import { user } from '@/data/mockData';
 import { Card, Eyebrow } from '@/components/UI/Card';
 import { Avatar } from '@/components/UI/Badges';
 import { useUiStore } from '@/store/useUiStore';
 import { useAppStore } from '@/store/useAppStore';
+import { useProfileStore, initialsOf } from '@/store/useProfileStore';
+
+function Field({
+  label,
+  value,
+  onChange,
+  type = 'text',
+  placeholder,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+  placeholder?: string;
+}) {
+  return (
+    <label className="block">
+      <span className="mb-1 block text-2xs font-semibold uppercase tracking-wider text-text3">{label}</span>
+      <input
+        type={type}
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full rounded-md border border-border bg-surface2 px-3 py-2 text-sm text-text placeholder:text-text3 focus:border-brand focus:outline-none"
+      />
+    </label>
+  );
+}
 
 function Row({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
@@ -25,6 +52,10 @@ export function SettingsView() {
   const bucketCount = useAppStore((s) => s.buckets.length);
   const ready = useAppStore((s) => s.ready);
   const init = useAppStore((s) => s.init);
+  const fullName = useProfileStore((s) => s.fullName);
+  const role = useProfileStore((s) => s.role);
+  const email = useProfileStore((s) => s.email);
+  const setProfile = useProfileStore((s) => s.setProfile);
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -37,10 +68,17 @@ export function SettingsView() {
       <Card className="mb-3 p-4">
         <Eyebrow>Account</Eyebrow>
         <div className="mt-3 flex items-center gap-3">
-          <Avatar initials={user.initials} />
+          <Avatar initials={initialsOf(fullName)} />
           <div>
-            <p className="text-sm font-medium text-text">{user.fullName}</p>
-            <p className="text-2xs text-text3">{user.role}</p>
+            <p className="text-sm font-medium text-text">{fullName || 'Your name'}</p>
+            <p className="text-2xs text-text3">{role || 'Add a role'}</p>
+          </div>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <Field label="Full name" value={fullName} onChange={(v) => setProfile({ fullName: v })} placeholder="Your name" />
+          <Field label="Role" value={role} onChange={(v) => setProfile({ role: v })} placeholder="e.g. Strategy Lead" />
+          <div className="sm:col-span-2">
+            <Field label="Email" type="email" value={email} onChange={(v) => setProfile({ email: v })} placeholder="you@example.com" />
           </div>
         </div>
       </Card>

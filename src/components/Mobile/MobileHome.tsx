@@ -1,9 +1,10 @@
 import { Sun, Moon, Sunset, Bell, ChevronRight, Play } from 'lucide-react';
-import { user, todayMetrics, focusSession } from '@/data/mockData';
+import { todayMetrics, focusSession } from '@/data/mockData';
 import type { ImportantItem } from '@/data/mockData';
 import { Card, Eyebrow } from '@/components/UI/Card';
 import { RingProgress } from '@/components/UI/Charts';
 import { useTopPriorities, useTasksDue } from '@/store/adapters';
+import { useProfileStore, firstNameOf } from '@/store/useProfileStore';
 
 function greeting() {
   const h = new Date().getHours();
@@ -28,6 +29,7 @@ export function MobileHome({ onStartFocus }: { onStartFocus: () => void }) {
   const { text: greet, Icon } = greeting();
   const priorities = useTopPriorities(3);
   const tasksDue = useTasksDue();
+  const firstName = useProfileStore((s) => firstNameOf(s.fullName));
 
   return (
     <div className="flex flex-col gap-4 p-4 pb-24">
@@ -35,7 +37,7 @@ export function MobileHome({ onStartFocus }: { onStartFocus: () => void }) {
       <div className="flex items-center justify-between">
         <h1 className="flex items-center gap-2 text-lg font-bold tracking-tight text-text">
           <Icon size={18} className="text-amber" />
-          {greet}, {user.firstName}
+          {greet}, {firstName}
         </h1>
         <button className="relative grid size-9 place-items-center rounded-full border border-border bg-surface text-text2">
           <Bell size={16} />
