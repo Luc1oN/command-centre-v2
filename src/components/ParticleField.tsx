@@ -86,7 +86,7 @@ export function ParticleField() {
       ctx.fillStyle = `rgba(${rgb},${dotAlpha.current})`;
       for (const n of nodes) {
         ctx.beginPath();
-        ctx.arc(n.x, n.y, 1.4, 0, Math.PI * 2);
+        ctx.arc(n.x, n.y, 4.2, 0, Math.PI * 2);
         ctx.fill();
       }
 
