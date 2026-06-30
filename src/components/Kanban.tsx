@@ -25,7 +25,7 @@ function QuickAdd() {
         addTask(text);
         setText('');
       }}
-      className="mb-2 flex items-center gap-2 rounded-lg border border-line bg-white/[0.02] px-2.5 py-1.5"
+      className="mb-2 flex items-center gap-2 rounded-lg border border-line bg-card px-2.5 py-1.5"
     >
       <Plus size={14} className="text-faint" />
       <input
@@ -44,7 +44,7 @@ function Lane({ id, label, tasks }: { id: LaneId; label: string; tasks: Task[] }
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="mb-3 flex items-center justify-between px-1">
         <span className="text-[11px] font-semibold uppercase tracking-wider text-faint">{label}</span>
-        <span className="grid size-5 min-w-5 place-items-center rounded-full bg-white/5 text-[10px] font-medium text-dim">
+        <span className="grid size-5 min-w-5 place-items-center rounded-full bg-card2 text-[10px] font-medium text-dim">
           {tasks.length}
         </span>
       </div>

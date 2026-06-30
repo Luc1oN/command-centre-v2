@@ -11,14 +11,20 @@ interface Node {
 /** Fullscreen constellation: drifting nodes + proximity links, theme-tinted. */
 export function ParticleField() {
   const theme = useHud((s) => s.theme);
+  const mode = useHud((s) => s.mode);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const colorRef = useRef('45,212,191');
+  const dotAlpha = useRef(0.85);
+  const linkAlpha = useRef(0.45);
 
-  // Re-read accent rgb whenever the theme changes
+  // Re-read accent rgb + mode-aware alphas whenever theme or mode changes
   useEffect(() => {
-    const rgb = getComputedStyle(document.documentElement).getPropertyValue('--accent-rgb').trim();
+    const cs = getComputedStyle(document.documentElement);
+    const rgb = cs.getPropertyValue('--accent-rgb').trim();
     if (rgb) colorRef.current = rgb;
-  }, [theme]);
+    dotAlpha.current = parseFloat(cs.getPropertyValue('--particle-alpha')) || 0.85;
+    linkAlpha.current = parseFloat(cs.getPropertyValue('--link-alpha')) || 0.45;
+  }, [theme, mode]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -67,8 +73,8 @@ export function ParticleField() {
           const dy = nodes[i].y - nodes[j].y;
           const dist = Math.hypot(dx, dy);
           if (dist < LINK) {
-            ctx.strokeStyle = `rgba(${rgb},${(1 - dist / LINK) * 0.45})`;
-            ctx.lineWidth = 0.6;
+            ctx.strokeStyle = `rgba(${rgb},${(1 - dist / LINK) * linkAlpha.current})`;
+            ctx.lineWidth = 0.7;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -77,7 +83,7 @@ export function ParticleField() {
         }
       }
 
-      ctx.fillStyle = `rgba(${rgb},0.85)`;
+      ctx.fillStyle = `rgba(${rgb},${dotAlpha.current})`;
       for (const n of nodes) {
         ctx.beginPath();
         ctx.arc(n.x, n.y, 1.4, 0, Math.PI * 2);

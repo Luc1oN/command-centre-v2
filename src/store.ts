@@ -8,6 +8,7 @@
 import { create } from 'zustand';
 
 export type ThemeId = 'aurora' | 'mint' | 'ember' | 'violet';
+export type Mode = 'dark' | 'light';
 export type LaneId = 'todo' | 'prog' | 'done';
 export type Priority = 'high' | 'med' | 'low';
 export type BookmarkMode = 'work' | 'personal';
@@ -111,6 +112,7 @@ const DEFAULT_PERSONAL: Bookmark[] = [
 interface HudState {
   userName: string;
   theme: ThemeId;
+  mode: Mode;
   city: City;
 
   tasks: Task[];
@@ -136,6 +138,7 @@ interface HudState {
 
   // actions
   setTheme: (t: ThemeId) => void;
+  toggleMode: () => void;
   setCity: (c: City) => void;
 
   addTask: (title: string, priority?: Priority) => void;
@@ -161,6 +164,7 @@ interface HudState {
 export const useHud = create<HudState>((set, get) => ({
   userName: 'Shane',
   theme: load<ThemeId>('cc_theme', 'aurora'),
+  mode: load<Mode>('cc_mode', 'dark'),
   city: load<City>('cc_city', CITIES[0]),
 
   tasks: load<Task[]>('cc_tasks', SEED_TASKS),
@@ -186,6 +190,13 @@ export const useHud = create<HudState>((set, get) => ({
     document.documentElement.setAttribute('data-theme', t);
     save('cc_theme', t);
     set({ theme: t });
+  },
+
+  toggleMode: () => {
+    const mode: Mode = get().mode === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-mode', mode);
+    save('cc_mode', mode);
+    set({ mode });
   },
 
   setCity: (c) => {
@@ -319,7 +330,8 @@ export const useHud = create<HudState>((set, get) => ({
   },
 }));
 
-// Apply persisted theme immediately
+// Apply persisted theme + mode immediately
 if (typeof document !== 'undefined') {
   document.documentElement.setAttribute('data-theme', useHud.getState().theme);
+  document.documentElement.setAttribute('data-mode', useHud.getState().mode);
 }

@@ -34,7 +34,7 @@ export function KanbanCard({ task, overlay }: { task: Task; overlay?: boolean })
       {...attributes}
       {...listeners}
       onClick={() => !overlay && advanceTask(task.id)}
-      className={`group touch-none cursor-grab rounded-xl border border-line bg-white/[0.03] p-3 transition-colors hover:border-line2 active:cursor-grabbing ${
+      className={`group touch-none cursor-grab rounded-xl border border-line bg-card p-3 transition-colors hover:border-line2 active:cursor-grabbing ${
         isDragging ? 'opacity-40' : ''
       } ${overlay ? 'shadow-2xl backdrop-blur-xl' : ''}`}
     >

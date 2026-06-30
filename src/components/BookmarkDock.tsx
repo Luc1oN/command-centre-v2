@@ -55,26 +55,26 @@ export function BookmarkDock() {
 
       {/* Inline editor for the selected bookmark */}
       {editing && selected && (
-        <div className="mb-3 space-y-2 rounded-xl border border-[var(--accent)]/40 bg-white/[0.03] p-3">
+        <div className="mb-3 space-y-2 rounded-xl border border-[var(--accent)]/40 bg-card p-3">
           <div className="flex gap-2">
             <input
               value={selected.icon}
               onChange={(e) => update(mode, selected.id, { icon: e.target.value })}
-              className="w-12 rounded-md border border-line bg-white/[0.03] px-2 py-1.5 text-center text-base focus:border-[var(--accent)] focus:outline-none"
+              className="w-12 rounded-md border border-line bg-card px-2 py-1.5 text-center text-base focus:border-[var(--accent)] focus:outline-none"
               aria-label="Icon"
             />
             <input
               value={selected.name}
               onChange={(e) => update(mode, selected.id, { name: e.target.value })}
               placeholder="Name"
-              className="flex-1 rounded-md border border-line bg-white/[0.03] px-2.5 py-1.5 text-sm focus:border-[var(--accent)] focus:outline-none"
+              className="flex-1 rounded-md border border-line bg-card px-2.5 py-1.5 text-sm focus:border-[var(--accent)] focus:outline-none"
             />
           </div>
           <input
             value={selected.url}
             onChange={(e) => update(mode, selected.id, { url: e.target.value })}
             placeholder="https://…"
-            className="w-full rounded-md border border-line bg-white/[0.03] px-2.5 py-1.5 font-mono text-xs focus:border-[var(--accent)] focus:outline-none"
+            className="w-full rounded-md border border-line bg-card px-2.5 py-1.5 font-mono text-xs focus:border-[var(--accent)] focus:outline-none"
           />
           <button onClick={() => setSel(null)} className="text-xs font-medium text-[var(--accent)]">
             Done editing this one
@@ -92,7 +92,7 @@ export function BookmarkDock() {
             </>
           );
           const cls = `flex items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left transition-colors ${
-            sel === b.id ? 'border-[var(--accent)] bg-[rgba(var(--accent-rgb),0.08)]' : 'border-line bg-white/[0.02] hover:border-line2'
+            sel === b.id ? 'border-[var(--accent)] bg-[rgba(var(--accent-rgb),0.08)]' : 'border-line bg-card hover:border-line2'
           }`;
           return editing ? (
             <button key={b.id} onClick={() => setSel(b.id)} className={cls}>

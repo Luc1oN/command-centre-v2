@@ -72,7 +72,7 @@ export function Weather() {
                   setCity(c);
                   setOpen(false);
                 }}
-                className={`flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-left text-sm transition-colors hover:bg-white/5 ${
+                className={`flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-left text-sm transition-colors hover:bg-card ${
                   c.name === city.name ? 'text-[var(--accent)]' : 'text-text'
                 }`}
               >

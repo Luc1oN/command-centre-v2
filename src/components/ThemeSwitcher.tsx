@@ -21,7 +21,7 @@ export function ThemeSwitcher() {
           title={t.label}
           aria-label={t.label}
           className={`size-4 rounded-full transition-transform hover:scale-110 ${
-            theme === t.id ? 'ring-2 ring-white/70 ring-offset-2 ring-offset-bg' : ''
+            theme === t.id ? 'ring-2 ring-[color:var(--color-text)] ring-offset-2 ring-offset-bg' : ''
           }`}
           style={{ background: t.color }}
         />

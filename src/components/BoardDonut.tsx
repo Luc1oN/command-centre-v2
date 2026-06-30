@@ -27,7 +27,7 @@ export function BoardDonut() {
       <div className="flex items-center gap-4">
         <div className="relative grid shrink-0 place-items-center" style={{ width: size, height: size }}>
           <svg width={size} height={size} className="-rotate-90">
-            <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={stroke} />
+            <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--track)" strokeWidth={stroke} />
             {segs.map((s, i) => {
               const frac = s.v / total;
               const dash = frac * c;

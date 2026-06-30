@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Sun, Moon } from 'lucide-react';
 import { useHud } from '@/store';
 import { Weather } from './Weather';
 import { MomentumMeter } from './MomentumMeter';
@@ -13,6 +14,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 export function Header() {
   const userName = useHud((s) => s.userName);
+  const mode = useHud((s) => s.mode);
+  const toggleMode = useHud((s) => s.toggleMode);
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
@@ -42,6 +45,13 @@ export function Header() {
         <div className="h-8 w-px bg-line" />
         <MomentumMeter />
         <div className="h-8 w-px bg-line" />
+        <button
+          onClick={toggleMode}
+          aria-label="Toggle light/dark"
+          className="grid size-8 place-items-center rounded-lg border border-line text-dim transition-colors hover:border-line2 hover:text-text"
+        >
+          {mode === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+        </button>
         <ThemeSwitcher />
       </div>
     </header>
