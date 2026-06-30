@@ -6,10 +6,9 @@ import { Header } from '@/components/Header';
 import { Pomodoro } from '@/components/Pomodoro';
 import { BoardDonut } from '@/components/BoardDonut';
 import { BookmarkDock } from '@/components/BookmarkDock';
-import { Kanban } from '@/components/Kanban';
+import { Workspace } from '@/components/Workspace';
 import { WeeklyChart } from '@/components/WeeklyChart';
 import { ActivityFeed } from '@/components/ActivityFeed';
-import { CardModal } from '@/components/CardModal';
 
 export default function App() {
   // Load real Supabase data (tasks, buckets, projects, notes) once
@@ -57,10 +56,8 @@ export default function App() {
             <BookmarkDock />
           </aside>
 
-          {/* Center board */}
-          <main className="flex min-h-0 flex-1">
-            <Kanban />
-          </main>
+          {/* Center workspace: Board / Projects / Brain Dump */}
+          <Workspace />
 
           {/* Right sidebar */}
           <aside className="flex w-[320px] shrink-0 flex-col gap-4">
@@ -69,8 +66,6 @@ export default function App() {
           </aside>
         </div>
       </div>
-
-      <CardModal />
     </div>
   );
 }

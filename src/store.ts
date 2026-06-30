@@ -9,6 +9,7 @@ import { create } from 'zustand';
 
 export type ThemeId = 'aurora' | 'mint' | 'ember' | 'violet';
 export type Mode = 'dark' | 'light';
+export type HudView = 'dashboard' | 'projects' | 'braindump';
 export type LaneId = 'todo' | 'prog' | 'done';
 export type Priority = 'high' | 'med' | 'low';
 export type BookmarkMode = 'work' | 'personal';
@@ -136,10 +137,17 @@ interface HudState {
   bookmarksWork: Bookmark[];
   bookmarksPersonal: Bookmark[];
 
-  // open task card (detail modal) — id refers to a useAppStore task
+  // open task card (detail modal) — id refers to a task in the active board
   openCardId: string | null;
   openCard: (id: string) => void;
   closeCard: () => void;
+
+  // workspace navigation (centre area)
+  view: HudView;
+  setView: (v: HudView) => void;
+  activeProjectId: string | null;
+  openProject: (id: string) => void;
+  closeProject: () => void;
 
   // actions
   setTheme: (t: ThemeId) => void;
@@ -194,6 +202,12 @@ export const useHud = create<HudState>((set, get) => ({
   openCardId: null,
   openCard: (id) => set({ openCardId: id }),
   closeCard: () => set({ openCardId: null }),
+
+  view: 'dashboard',
+  setView: (view) => set({ view }),
+  activeProjectId: null,
+  openProject: (id) => set({ activeProjectId: id, view: 'projects' }),
+  closeProject: () => set({ activeProjectId: null }),
 
   setTheme: (t) => {
     document.documentElement.setAttribute('data-theme', t);

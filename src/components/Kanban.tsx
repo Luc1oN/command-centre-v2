@@ -10,15 +10,16 @@ import {
 } from '@dnd-kit/core';
 import type { DragStartEvent, DragEndEvent } from '@dnd-kit/core';
 import { Plus } from 'lucide-react';
-import { useAppStore } from '@/store/useAppStore';
 import { useHud } from '@/store';
 import type { Task, Bucket } from '@/types';
+import { useBoard } from '@/board/BoardContext';
 import { KanbanCard } from './KanbanCard';
+import { CardModal } from './CardModal';
 
 const PRI_RANK: Record<Task['pri'], number> = { high: 0, medium: 1, low: 2 };
 
 function QuickAdd({ bucketId }: { bucketId: string }) {
-  const addTask = useAppStore((s) => s.addTask);
+  const addTask = useBoard().addTask;
   const [text, setText] = useState('');
   return (
     <form
@@ -73,11 +74,8 @@ function Lane({ bucket, tasks }: { bucket: Bucket; tasks: Task[] }) {
   );
 }
 
-export function Kanban() {
-  const buckets = useAppStore((s) => s.buckets);
-  const tasks = useAppStore((s) => s.tasks);
-  const moveTask = useAppStore((s) => s.moveTask);
-  const ready = useAppStore((s) => s.ready);
+export function Kanban({ title = 'Board' }: { title?: string }) {
+  const { buckets, tasks, moveTask, ready } = useBoard();
   const [active, setActive] = useState<Task | null>(null);
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }));
@@ -103,7 +101,7 @@ export function Kanban() {
   return (
     <div className="glass flex min-h-0 flex-1 flex-col rounded-2xl p-4">
       <div className="mb-3 flex items-center justify-between">
-        <span className="text-sm font-semibold">Board</span>
+        <span className="text-sm font-semibold">{title}</span>
         <span className="text-[11px] text-faint">{ready ? 'Tap to edit · drag to move' : 'Loading…'}</span>
       </div>
       <DndContext sensors={sensors} collisionDetection={pointerWithin} onDragStart={onDragStart} onDragEnd={onDragEnd}>
@@ -114,6 +112,7 @@ export function Kanban() {
         </div>
         <DragOverlay>{active ? <div className="w-[240px] rotate-2"><KanbanCard task={active} overlay /></div> : null}</DragOverlay>
       </DndContext>
+      <CardModal />
     </div>
   );
 }

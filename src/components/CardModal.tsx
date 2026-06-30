@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { X, Trash2, Check, Plus, RotateCcw } from 'lucide-react';
-import { useAppStore } from '@/store/useAppStore';
 import { useHud } from '@/store';
+import { useBoard } from '@/board/BoardContext';
 import type { Priority } from '@/types';
 
 const PRIS: Priority[] = ['high', 'medium', 'low'];
@@ -19,15 +19,9 @@ export function CardModal() {
   const openCardId = useHud((s) => s.openCardId);
   const closeCard = useHud((s) => s.closeCard);
 
-  const task = useAppStore((s) => s.tasks.find((t) => t.id === openCardId));
-  const buckets = useAppStore((s) => s.buckets);
-  const updateTask = useAppStore((s) => s.updateTask);
-  const moveTask = useAppStore((s) => s.moveTask);
-  const toggleTask = useAppStore((s) => s.toggleTask);
-  const deleteTask = useAppStore((s) => s.deleteTask);
-  const addChecklistItem = useAppStore((s) => s.addChecklistItem);
-  const toggleChecklistItem = useAppStore((s) => s.toggleChecklistItem);
-  const deleteChecklistItem = useAppStore((s) => s.deleteChecklistItem);
+  const { buckets, tasks, updateTask, moveTask, toggleTask, deleteTask, addChecklistItem, toggleChecklistItem, deleteChecklistItem } =
+    useBoard();
+  const task = tasks.find((t) => t.id === openCardId);
 
   const [checkText, setCheckText] = useState('');
 
