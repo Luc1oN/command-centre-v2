@@ -16,14 +16,16 @@ export function ParticleField() {
   const colorRef = useRef('45,212,191');
   const dotAlpha = useRef(0.85);
   const linkAlpha = useRef(0.45);
+  const dotSize = useRef(2);
 
-  // Re-read accent rgb + mode-aware alphas whenever theme or mode changes
+  // Re-read accent rgb + mode-aware alphas/size whenever theme or mode changes
   useEffect(() => {
     const cs = getComputedStyle(document.documentElement);
     const rgb = cs.getPropertyValue('--accent-rgb').trim();
     if (rgb) colorRef.current = rgb;
     dotAlpha.current = parseFloat(cs.getPropertyValue('--particle-alpha')) || 0.85;
     linkAlpha.current = parseFloat(cs.getPropertyValue('--link-alpha')) || 0.45;
+    dotSize.current = parseFloat(cs.getPropertyValue('--particle-size')) || 2;
   }, [theme, mode]);
 
   useEffect(() => {
@@ -86,7 +88,7 @@ export function ParticleField() {
       ctx.fillStyle = `rgba(${rgb},${dotAlpha.current})`;
       for (const n of nodes) {
         ctx.beginPath();
-        ctx.arc(n.x, n.y, 4.2, 0, Math.PI * 2);
+        ctx.arc(n.x, n.y, dotSize.current, 0, Math.PI * 2);
         ctx.fill();
       }
 

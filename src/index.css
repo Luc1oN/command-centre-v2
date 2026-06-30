@@ -64,6 +64,7 @@
   --track: rgba(255, 255, 255, 0.07);
   --particle-alpha: 0.85;
   --link-alpha: 0.45;
+  --particle-size: 2;
 }
 
 /* ── LIGHT MODE ───────────────────────────────────────────── */
@@ -86,6 +87,7 @@ html[data-mode='light'] {
   --track: rgba(17, 24, 39, 0.09);
   --particle-alpha: 0.55;
   --link-alpha: 0.3;
+  --particle-size: 4;
 }
 
 * {
