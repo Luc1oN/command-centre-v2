@@ -1,155 +1,66 @@
-import { useCallback, useEffect, useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import { Sidebar } from '@/components/Layout/Sidebar';
-import { TopBar } from '@/components/Layout/TopBar';
-import { IntelligenceRail } from '@/components/Layout/IntelligenceRail';
-import { TodayView } from '@/components/Today/TodayView';
-import { TasksView } from '@/components/Tasks/TasksView';
-import { ProjectDetail } from '@/components/Projects/ProjectDetail';
-import { InsightsView } from '@/components/Insights/InsightsView';
-import { CalendarView } from '@/components/Calendar/CalendarView';
-import { AIAssistant } from '@/components/AI/AIAssistant';
-import { FocusMode } from '@/components/Focus/FocusMode';
-import { TriageMode } from '@/components/Triage/TriageMode';
-import { CommandPalette } from '@/components/CommandPalette';
-import { CardDetailModal } from '@/components/Cards/CardDetailModal';
-import { Toaster } from '@/components/UI/Toaster';
-import { Placeholder } from '@/components/UI/Placeholder';
-import { MobileHome } from '@/components/Mobile/MobileHome';
-import { BottomTabs } from '@/components/Mobile/BottomTabs';
-import type { MobileTab } from '@/components/Mobile/BottomTabs';
-import { MobileMore } from '@/components/Mobile/MobileMore';
-import { SettingsView } from '@/components/Settings/SettingsView';
-import { personalNav } from '@/data/mockData';
-import type { ScreenId } from '@/data/mockData';
-import { useAppStore } from '@/store/useAppStore';
-import { useUiStore } from '@/store/useUiStore';
+import { useEffect } from 'react';
+import { useHud } from '@/store';
+import { ParticleField } from '@/components/ParticleField';
+import { Header } from '@/components/Header';
+import { Pomodoro } from '@/components/Pomodoro';
+import { BoardDonut } from '@/components/BoardDonut';
+import { BookmarkDock } from '@/components/BookmarkDock';
+import { Kanban } from '@/components/Kanban';
+import { WeeklyChart } from '@/components/WeeklyChart';
+import { ActivityFeed } from '@/components/ActivityFeed';
 
 export default function App() {
-  const initStore = useAppStore((s) => s.init);
-  const triageOpen = useUiStore((s) => s.triageOpen);
-  const closeTriage = useUiStore((s) => s.closeTriage);
-  const theme = useUiStore((s) => s.theme);
-  const [screen, setScreen] = useState<ScreenId>('today');
-  const [focusActive, setFocusActive] = useState(false);
-  const [paletteOpen, setPaletteOpen] = useState(false);
-  const [moreOpen, setMoreOpen] = useState(false);
-
-  // Load real data from Supabase once on mount
+  // Master 1s tick: drives clock-independent momentum + pomodoro countdown
   useEffect(() => {
-    initStore();
-  }, [initStore]);
+    const id = setInterval(() => useHud.getState().tick(), 1000);
+    return () => clearInterval(id);
+  }, []);
 
-  // Apply theme class to <html>
+  // Any user activity keeps momentum out of the idle state (throttled)
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, [theme]);
-
-  // ⌘K / Ctrl-K toggles the command palette
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        setPaletteOpen((o) => !o);
+    let last = 0;
+    const onAct = () => {
+      const now = Date.now();
+      if (now - last > 5000) {
+        last = now;
+        useHud.getState().registerInteraction();
       }
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener('pointerdown', onAct);
+    window.addEventListener('keydown', onAct);
+    return () => {
+      window.removeEventListener('pointerdown', onAct);
+      window.removeEventListener('keydown', onAct);
+    };
   }, []);
-
-  const navigate = useCallback((id: ScreenId) => {
-    if (id === 'focus') {
-      setFocusActive(true);
-      return;
-    }
-    setScreen(id);
-  }, []);
-
-  // Expose navigate to deep components via the UI store
-  useEffect(() => {
-    useUiStore.setState({ navigate });
-  }, [navigate]);
-
-  const startFocus = () => setFocusActive(true);
-
-  const renderScreen = () => {
-    switch (screen) {
-      case 'today':
-        return <TodayView onStartFocus={startFocus} onNavigate={navigate} />;
-      case 'tasks':
-        return <TasksView />;
-      case 'projects':
-        return <ProjectDetail />;
-      case 'insights':
-        return <InsightsView />;
-      case 'calendar':
-        return <CalendarView />;
-      case 'ai':
-        return <AIAssistant />;
-      case 'settings':
-        return <SettingsView />;
-      default: {
-        const item = personalNav.find((n) => n.id === screen);
-        return item ? <Placeholder icon={item.icon} title={item.label} /> : <TodayView onStartFocus={startFocus} onNavigate={navigate} />;
-      }
-    }
-  };
-
-  const mobileTab: MobileTab =
-    screen === 'tasks' ? 'tasks' : screen === 'projects' ? 'projects' : screen === 'calendar' ? 'calendar' : screen === 'today' ? 'home' : 'more';
-
-  const onMobileTab = (t: MobileTab) => {
-    if (t === 'home') setScreen('today');
-    else if (t === 'tasks') setScreen('tasks');
-    else if (t === 'projects') setScreen('projects');
-    else if (t === 'calendar') setScreen('calendar');
-    else setMoreOpen(true);
-  };
 
   return (
-    <div className="h-screen bg-bg font-sans text-text">
-      {/* Focus Mode takes over the whole screen */}
-      <AnimatePresence>{focusActive && <FocusMode onEnd={() => setFocusActive(false)} />}</AnimatePresence>
+    <div className="grid-bg relative flex h-screen flex-col gap-4 overflow-hidden p-4">
+      <ParticleField />
 
-      {/* Triage Mode takes over the whole screen */}
-      <AnimatePresence>{triageOpen && <TriageMode onClose={closeTriage} />}</AnimatePresence>
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col gap-4">
+        <Header />
 
-      {/* ─── Desktop ─── */}
-      <div className="hidden h-screen lg:flex">
-        <Sidebar current={screen} onNavigate={navigate} />
-        <div className="flex min-w-0 flex-1 flex-col">
-          <TopBar current={screen} onNavigate={navigate} onOpenPalette={() => setPaletteOpen(true)} />
-          <div className="flex min-h-0 flex-1">
-            <main className="flex-1 overflow-y-auto p-6">{renderScreen()}</main>
-            {screen === 'today' && <IntelligenceRail />}
-          </div>
+        <div className="flex min-h-0 flex-1 gap-4">
+          {/* Left sidebar */}
+          <aside className="flex w-[320px] shrink-0 flex-col gap-4 overflow-y-auto pr-0.5">
+            <Pomodoro />
+            <BoardDonut />
+            <BookmarkDock />
+          </aside>
+
+          {/* Center board */}
+          <main className="flex min-h-0 flex-1">
+            <Kanban />
+          </main>
+
+          {/* Right sidebar */}
+          <aside className="flex w-[320px] shrink-0 flex-col gap-4">
+            <WeeklyChart />
+            <ActivityFeed />
+          </aside>
         </div>
       </div>
-
-      {/* ─── Mobile ─── */}
-      <div className="flex h-screen flex-col lg:hidden">
-        <div className="flex-1 overflow-y-auto">
-          {screen === 'today' ? <MobileHome onStartFocus={startFocus} /> : <div className="p-4 pb-24">{renderScreen()}</div>}
-        </div>
-        <BottomTabs current={mobileTab} onChange={onMobileTab} />
-        <AnimatePresence>
-          {moreOpen && (
-            <MobileMore onClose={() => setMoreOpen(false)} onNavigate={navigate} onStartFocus={startFocus} />
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Command palette (shared) */}
-      <CommandPalette
-        open={paletteOpen}
-        onClose={() => setPaletteOpen(false)}
-        onNavigate={navigate}
-        onStartFocus={startFocus}
-      />
-
-      {/* Card detail modal + toast (shared, app-root overlays) */}
-      <CardDetailModal />
-      <Toaster />
     </div>
   );
 }

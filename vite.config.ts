@@ -10,6 +10,8 @@ export default defineConfig(({ command }) => ({
   base: command === 'build' ? '/command-centre-v2/' : '/',
   plugins: [react(), tailwindcss()],
   resolve: {
+    // Guarantee a single React copy (avoids dev optimize-deps "invalid hook call")
+    dedupe: ['react', 'react-dom'],
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
