@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useHud } from '@/store';
+import { useAppStore } from '@/store/useAppStore';
 import { ParticleField } from '@/components/ParticleField';
 import { Header } from '@/components/Header';
 import { Pomodoro } from '@/components/Pomodoro';
@@ -8,8 +9,15 @@ import { BookmarkDock } from '@/components/BookmarkDock';
 import { Kanban } from '@/components/Kanban';
 import { WeeklyChart } from '@/components/WeeklyChart';
 import { ActivityFeed } from '@/components/ActivityFeed';
+import { CardModal } from '@/components/CardModal';
 
 export default function App() {
+  // Load real Supabase data (tasks, buckets, projects, notes) once
+  const initData = useAppStore((s) => s.init);
+  useEffect(() => {
+    initData();
+  }, [initData]);
+
   // Master 1s tick: drives clock-independent momentum + pomodoro countdown
   useEffect(() => {
     const id = setInterval(() => useHud.getState().tick(), 1000);
@@ -61,6 +69,8 @@ export default function App() {
           </aside>
         </div>
       </div>
+
+      <CardModal />
     </div>
   );
 }

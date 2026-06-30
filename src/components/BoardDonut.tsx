@@ -1,24 +1,22 @@
-import { useHud } from '@/store';
+import { useAppStore } from '@/store/useAppStore';
 
 export function BoardDonut() {
-  const tasks = useHud((s) => s.tasks);
-  const todo = tasks.filter((t) => t.status === 'todo').length;
-  const prog = tasks.filter((t) => t.status === 'prog').length;
-  const done = tasks.filter((t) => t.status === 'done').length;
-  const total = todo + prog + done || 1;
-  const donePct = Math.round((done / total) * 100);
+  const tasks = useAppStore((s) => s.tasks);
+  const buckets = useAppStore((s) => s.buckets);
+
+  const total = tasks.length || 1;
+  const donePct = Math.round((tasks.filter((t) => t.done).length / total) * 100);
+
+  const segs = buckets.map((b) => ({
+    label: b.title,
+    color: b.color,
+    v: tasks.filter((t) => t.bucketId === b.id).length,
+  }));
 
   const size = 132;
   const stroke = 12;
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
-
-  const segs = [
-    { v: todo, color: 'var(--color-todo)', label: 'To Do' },
-    { v: prog, color: 'var(--color-prog)', label: 'In Progress' },
-    { v: done, color: 'var(--color-done)', label: 'Done' },
-  ];
-
   let acc = 0;
 
   return (
@@ -51,7 +49,7 @@ export function BoardDonut() {
           </svg>
           <div className="absolute flex flex-col items-center">
             <span className="font-mono tnum text-2xl font-medium leading-none">{donePct}%</span>
-            <span className="text-[10px] text-faint">complete</span>
+            <span className="text-[10px] text-faint">done</span>
           </div>
         </div>
         <div className="flex flex-col gap-2">

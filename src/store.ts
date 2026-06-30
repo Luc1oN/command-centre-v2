@@ -136,6 +136,11 @@ interface HudState {
   bookmarksWork: Bookmark[];
   bookmarksPersonal: Bookmark[];
 
+  // open task card (detail modal) — id refers to a useAppStore task
+  openCardId: string | null;
+  openCard: (id: string) => void;
+  closeCard: () => void;
+
   // actions
   setTheme: (t: ThemeId) => void;
   toggleMode: () => void;
@@ -185,6 +190,10 @@ export const useHud = create<HudState>((set, get) => ({
   bookmarkMode: 'work',
   bookmarksWork: load<Bookmark[]>('cc_bookmarks_work', DEFAULT_WORK),
   bookmarksPersonal: load<Bookmark[]>('cc_bookmarks_personal', DEFAULT_PERSONAL),
+
+  openCardId: null,
+  openCard: (id) => set({ openCardId: id }),
+  closeCard: () => set({ openCardId: null }),
 
   setTheme: (t) => {
     document.documentElement.setAttribute('data-theme', t);
