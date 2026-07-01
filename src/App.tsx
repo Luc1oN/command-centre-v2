@@ -9,10 +9,13 @@ import { BookmarkDock } from '@/components/BookmarkDock';
 import { Workspace } from '@/components/Workspace';
 import { WeeklyChart } from '@/components/WeeklyChart';
 import { ActivityFeed } from '@/components/ActivityFeed';
+import { TriageFlow } from '@/components/TriageFlow';
 
 export default function App() {
   // Load real Supabase data (tasks, buckets, projects, notes) once
   const initData = useAppStore((s) => s.init);
+  const triageOpen = useHud((s) => s.triageOpen);
+  const closeTriage = useHud((s) => s.closeTriage);
   useEffect(() => {
     initData();
   }, [initData]);
@@ -66,6 +69,8 @@ export default function App() {
           </aside>
         </div>
       </div>
+
+      {triageOpen && <TriageFlow onClose={closeTriage} />}
     </div>
   );
 }

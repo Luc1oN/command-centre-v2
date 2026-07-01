@@ -14,6 +14,7 @@ import { useHud } from '@/store';
 import type { Task, Bucket } from '@/types';
 import { useBoard } from '@/board/BoardContext';
 import { KanbanCard } from './KanbanCard';
+import { CaptureBar } from './CaptureBar';
 
 const PRI_RANK: Record<Task['pri'], number> = { high: 0, medium: 1, low: 2 };
 
@@ -121,6 +122,9 @@ export function Kanban({ title = 'Board' }: { title?: string }) {
       <div className="mb-3 flex items-center justify-between">
         <span className="text-sm font-semibold">{title}</span>
         <span className="text-[11px] text-faint">{ready ? 'Tap to edit · drag to move' : 'Loading…'}</span>
+      </div>
+      <div className="mb-3">
+        <CaptureBar />
       </div>
       <DndContext sensors={sensors} collisionDetection={pointerWithin} onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <div className="flex min-h-0 flex-1 gap-4">

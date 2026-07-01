@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Plus, Calendar, ChevronRight } from 'lucide-react';
+import { Calendar, ChevronRight } from 'lucide-react';
 import { useHud } from '@/store';
 import { useBoard } from '@/board/BoardContext';
 import type { Task } from '@/types';
+import { CaptureBar } from './CaptureBar';
 
 const PRI: Record<Task['pri'], { label: string; cls: string }> = {
   high: { label: 'High', cls: 'text-[var(--color-pri-high)] border-[var(--color-pri-high)]/40 bg-[var(--color-pri-high)]/10' },
@@ -48,9 +49,8 @@ function MobileTaskCard({ task }: { task: Task }) {
 
 /** Task-focused board for phones / iPad portrait: bucket tabs + list. */
 export function MobileBoard() {
-  const { buckets, tasks, addTask } = useBoard();
+  const { buckets, tasks } = useBoard();
   const [sel, setSel] = useState<string>(buckets[0]?.id ?? '');
-  const [text, setText] = useState('');
 
   useEffect(() => {
     if (buckets.length && !buckets.find((b) => b.id === sel)) setSel(buckets[0].id);
@@ -60,6 +60,9 @@ export function MobileBoard() {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
+      {/* Capture → Triage + blitz triage */}
+      <CaptureBar />
+
       {/* Bucket tabs */}
       <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1">
         {buckets.map((b) => {
@@ -81,28 +84,6 @@ export function MobileBoard() {
           );
         })}
       </div>
-
-      {/* Quick add */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const v = text.trim();
-          if (!v || !sel) return;
-          addTask({ text: v, bucketId: sel, pri: 'medium' });
-          useHud.getState().bump(8);
-          useHud.getState().log('add', `Added “${v}”`);
-          setText('');
-        }}
-        className="flex items-center gap-2 rounded-xl border border-line bg-card px-3 py-2.5"
-      >
-        <Plus size={16} className="text-faint" />
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Add a task…"
-          className="w-full bg-transparent text-[15px] text-text placeholder:text-faint focus:outline-none"
-        />
-      </form>
 
       {/* Task list */}
       <div className="flex-1 space-y-2 pb-4">

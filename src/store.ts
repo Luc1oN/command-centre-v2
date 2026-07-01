@@ -149,6 +149,10 @@ interface HudState {
   openProject: (id: string) => void;
   closeProject: () => void;
 
+  triageOpen: boolean;
+  openTriage: () => void;
+  closeTriage: () => void;
+
   // actions
   setTheme: (t: ThemeId) => void;
   toggleMode: () => void;
@@ -208,6 +212,10 @@ export const useHud = create<HudState>((set, get) => ({
   activeProjectId: null,
   openProject: (id) => set({ activeProjectId: id, view: 'projects' }),
   closeProject: () => set({ activeProjectId: null }),
+
+  triageOpen: false,
+  openTriage: () => set({ triageOpen: true }),
+  closeTriage: () => set({ triageOpen: false }),
 
   setTheme: (t) => {
     document.documentElement.setAttribute('data-theme', t);
