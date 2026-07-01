@@ -41,7 +41,7 @@ export function ProjectsView() {
 
   return (
     <div className="glass flex min-h-0 flex-1 flex-col rounded-2xl p-5">
-      <div className="mb-4 flex items-center justify-between gap-3">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
         <span className="text-sm font-semibold">Projects</span>
         <form
           onSubmit={(e) => {
@@ -54,7 +54,7 @@ export function ProjectsView() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="New project name…"
-            className="w-44 bg-transparent text-sm text-text placeholder:text-faint focus:outline-none"
+            className="w-full bg-transparent text-sm text-text placeholder:text-faint focus:outline-none sm:w-44"
           />
           <button type="submit" className="grid size-6 place-items-center rounded-md text-bg" style={{ background: 'var(--accent)' }}>
             <Plus size={14} />
@@ -70,7 +70,7 @@ export function ProjectsView() {
           </div>
         </div>
       ) : (
-        <div className="grid flex-1 auto-rows-min grid-cols-2 gap-3 overflow-y-auto pr-1 lg:grid-cols-3">
+        <div className="grid flex-1 auto-rows-min grid-cols-1 gap-3 overflow-y-auto pr-1 sm:grid-cols-2 xl:grid-cols-3">
           {projects.map((p) => {
             const total = p.tasks.length || 1;
             const done = p.tasks.filter((t) => t.done).length;

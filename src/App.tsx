@@ -42,15 +42,15 @@ export default function App() {
   }, []);
 
   return (
-    <div className="grid-bg relative flex h-screen flex-col gap-4 overflow-hidden p-4">
+    <div className="grid-bg relative flex min-h-screen flex-col gap-3 p-3 lg:h-screen lg:gap-4 lg:overflow-hidden lg:p-4">
       <ParticleField />
 
-      <div className="relative z-10 flex min-h-0 flex-1 flex-col gap-4">
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col gap-3 lg:gap-4">
         <Header />
 
         <div className="flex min-h-0 flex-1 gap-4">
-          {/* Left sidebar */}
-          <aside className="flex w-[320px] shrink-0 flex-col gap-4 overflow-y-auto pr-0.5">
+          {/* Left sidebar — laptop / desktop only */}
+          <aside className="hidden w-[300px] shrink-0 flex-col gap-4 overflow-y-auto pr-0.5 lg:flex xl:w-[320px]">
             <Pomodoro />
             <BoardDonut />
             <BookmarkDock />
@@ -59,8 +59,8 @@ export default function App() {
           {/* Center workspace: Board / Projects / Brain Dump */}
           <Workspace />
 
-          {/* Right sidebar */}
-          <aside className="flex w-[320px] shrink-0 flex-col gap-4">
+          {/* Right sidebar — large screens only */}
+          <aside className="hidden w-[320px] shrink-0 flex-col gap-4 xl:flex">
             <WeeklyChart />
             <ActivityFeed />
           </aside>

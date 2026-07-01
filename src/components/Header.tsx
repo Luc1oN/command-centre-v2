@@ -28,23 +28,29 @@ export function Header() {
   const h12 = ((hours + 11) % 12) + 1;
 
   return (
-    <header className="glass relative z-10 flex items-center justify-between gap-4 rounded-2xl px-5 py-3">
-      <div className="flex items-baseline gap-5">
+    <header className="glass relative z-10 flex items-center justify-between gap-3 rounded-2xl px-4 py-2.5 sm:px-5 sm:py-3">
+      <div className="flex items-baseline gap-3 sm:gap-5">
         <div>
-          <div className="text-xs text-dim">{greeting(hours)}</div>
-          <div className="text-xl font-semibold tracking-tight">{userName}</div>
+          <div className="text-[11px] text-dim sm:text-xs">{greeting(hours)}</div>
+          <div className="text-base font-semibold tracking-tight sm:text-xl">{userName}</div>
         </div>
-        <div className="font-mono tnum text-3xl font-medium tracking-tight">
-          {pad(h12)}:{pad(now.getMinutes())}:<span className="text-[var(--accent)]">{pad(now.getSeconds())}</span>
-          <span className="ml-1.5 text-sm text-dim">{ampm}</span>
+        <div className="font-mono tnum text-xl font-medium tracking-tight sm:text-3xl">
+          {pad(h12)}:{pad(now.getMinutes())}
+          <span className="hidden sm:inline">
+            :<span className="text-[var(--accent)]">{pad(now.getSeconds())}</span>
+          </span>
+          <span className="ml-1.5 text-xs text-dim sm:text-sm">{ampm}</span>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        <Weather />
-        <div className="h-8 w-px bg-line" />
-        <MomentumMeter />
-        <div className="h-8 w-px bg-line" />
+      <div className="flex items-center gap-2 sm:gap-4">
+        <div className="hidden sm:block">
+          <Weather />
+        </div>
+        <div className="hidden h-8 w-px bg-line xl:block" />
+        <div className="hidden xl:block">
+          <MomentumMeter />
+        </div>
         <button
           onClick={toggleMode}
           aria-label="Toggle light/dark"

@@ -6,6 +6,8 @@ import { BoardProvider, newTask } from '@/board/BoardContext';
 import type { BoardApi } from '@/board/BoardContext';
 import type { Task } from '@/types';
 import { Kanban } from './Kanban';
+import { MobileBoard } from './MobileBoard';
+import { CardModal } from './CardModal';
 
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
@@ -76,7 +78,13 @@ export function ProjectBoard({ projectId }: { projectId: string }) {
         </button>
       </div>
       <BoardProvider value={api}>
-        <Kanban title={`${project.icon ?? '📋'}  ${project.name}`} />
+        <div className="hidden min-h-0 flex-1 lg:flex">
+          <Kanban title={`${project.icon ?? '📋'}  ${project.name}`} />
+        </div>
+        <div className="flex min-h-0 flex-1 lg:hidden">
+          <MobileBoard />
+        </div>
+        <CardModal />
       </BoardProvider>
     </div>
   );

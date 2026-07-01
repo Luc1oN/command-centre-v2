@@ -105,8 +105,14 @@ body {
   color: var(--color-text);
   font-family: var(--font-display);
   -webkit-font-smoothing: antialiased;
-  overflow: hidden;
   transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Fixed dashboard only on large screens; smaller devices scroll naturally */
+@media (min-width: 1024px) {
+  body {
+    overflow: hidden;
+  }
 }
 
 /* Glass panel */

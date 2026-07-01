@@ -3,6 +3,8 @@ import { useAppStore } from '@/store/useAppStore';
 import { BoardProvider } from '@/board/BoardContext';
 import type { BoardApi } from '@/board/BoardContext';
 import { Kanban } from './Kanban';
+import { MobileBoard } from './MobileBoard';
+import { CardModal } from './CardModal';
 
 /** Dashboard board — maps the board API to the top-level Supabase tasks. */
 export function DashboardBoard() {
@@ -40,7 +42,14 @@ export function DashboardBoard() {
 
   return (
     <BoardProvider value={api}>
-      <Kanban title="Board" />
+      {/* Desktop: full kanban. Mobile / iPad portrait: task-focused list. */}
+      <div className="hidden min-h-0 flex-1 lg:flex">
+        <Kanban title="Board" />
+      </div>
+      <div className="flex min-h-0 flex-1 lg:hidden">
+        <MobileBoard />
+      </div>
+      <CardModal />
     </BoardProvider>
   );
 }

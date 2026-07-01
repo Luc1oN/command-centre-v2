@@ -14,7 +14,6 @@ import { useHud } from '@/store';
 import type { Task, Bucket } from '@/types';
 import { useBoard } from '@/board/BoardContext';
 import { KanbanCard } from './KanbanCard';
-import { CardModal } from './CardModal';
 
 const PRI_RANK: Record<Task['pri'], number> = { high: 0, medium: 1, low: 2 };
 
@@ -131,7 +130,6 @@ export function Kanban({ title = 'Board' }: { title?: string }) {
         </div>
         <DragOverlay>{active ? <div className="w-[240px] rotate-2"><KanbanCard task={active} overlay /></div> : null}</DragOverlay>
       </DndContext>
-      <CardModal />
     </div>
   );
 }
