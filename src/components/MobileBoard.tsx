@@ -50,10 +50,13 @@ function MobileTaskCard({ task }: { task: Task }) {
 /** Task-focused board for phones / iPad portrait: bucket tabs + list. */
 export function MobileBoard() {
   const { buckets, tasks } = useBoard();
-  const [sel, setSel] = useState<string>(buckets[0]?.id ?? '');
+  // Default to the Triage inbox if present, else the first list.
+  const defaultBucket = () => buckets.find((b) => b.title.toLowerCase() === 'triage') ?? buckets[0];
+  const [sel, setSel] = useState<string>(defaultBucket()?.id ?? '');
 
   useEffect(() => {
-    if (buckets.length && !buckets.find((b) => b.id === sel)) setSel(buckets[0].id);
+    if (buckets.length && !buckets.find((b) => b.id === sel)) setSel(defaultBucket().id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buckets, sel]);
 
   const list = tasks.filter((t) => t.bucketId === sel).sort((a, b) => PRI_RANK[a.pri] - PRI_RANK[b.pri]);
