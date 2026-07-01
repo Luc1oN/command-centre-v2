@@ -186,18 +186,15 @@ export async function loadInitial(
   const remote = await fetchRemote();
 
   if (remote) {
-    const localCount = local?.tasks.length ?? 0;
-    const remoteCount = remote.tasks.length;
-    // Remote wins if it has at least as many tasks (don't clobber good data)
-    if (remoteCount >= localCount) {
-      writeLocal(remote);
-      return remote;
-    }
-    // Local is richer — push it up, keep local
-    if (local) {
+    // Remote is the source of truth on load (single user). Only fall back to a
+    // richer local cache when remote came back EMPTY (a likely transient/empty
+    // read) — otherwise a deliberate deletion/cleanup would be undone by a stale
+    // local cache that still holds the old (e.g. duplicated) tasks.
+    if (remote.tasks.length === 0 && local && local.tasks.length > 0) {
       pushRemote(local);
       return local;
     }
+    writeLocal(remote);
     return remote;
   }
 
