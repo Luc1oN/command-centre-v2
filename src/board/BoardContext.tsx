@@ -13,6 +13,7 @@ export interface BoardApi {
   updateTask: (id: string, patch: Partial<Task>) => void;
   toggleTask: (id: string) => void;
   deleteTask: (id: string) => void;
+  clearBucket: (bucketId: string) => void;
   addChecklistItem: (taskId: string, text: string) => void;
   toggleChecklistItem: (taskId: string, itemId: string) => void;
   deleteChecklistItem: (taskId: string, itemId: string) => void;

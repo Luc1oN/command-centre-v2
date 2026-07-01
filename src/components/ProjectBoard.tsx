@@ -38,6 +38,7 @@ export function ProjectBoard({ projectId }: { projectId: string }) {
         setTasks(project.tasks.map((x) => (x.id === id ? { ...x, done, bucketId, status: bucketId } : x)));
       },
       deleteTask: (id) => setTasks(project.tasks.filter((t) => t.id !== id)),
+      clearBucket: (bucketId) => setTasks(project.tasks.filter((t) => t.bucketId !== bucketId)),
       addChecklistItem: (taskId, text) =>
         setTasks(project.tasks.map((t) => (t.id === taskId ? { ...t, checklist: [...t.checklist, { id: uid(), text: text.trim(), done: false }] } : t))),
       toggleChecklistItem: (taskId, itemId) =>

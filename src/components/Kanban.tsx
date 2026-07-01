@@ -9,7 +9,7 @@ import {
   pointerWithin,
 } from '@dnd-kit/core';
 import type { DragStartEvent, DragEndEvent } from '@dnd-kit/core';
-import { Plus } from 'lucide-react';
+import { Plus, Eraser } from 'lucide-react';
 import { useHud } from '@/store';
 import type { Task, Bucket } from '@/types';
 import { useBoard } from '@/board/BoardContext';
@@ -47,16 +47,35 @@ function QuickAdd({ bucketId }: { bucketId: string }) {
 
 function Lane({ bucket, tasks }: { bucket: Bucket; tasks: Task[] }) {
   const { setNodeRef, isOver } = useDroppable({ id: bucket.id, data: { bucketId: bucket.id } });
+  const clearBucket = useBoard().clearBucket;
+  const clear = () => {
+    if (tasks.length === 0) return;
+    if (confirm(`Clear all ${tasks.length} task${tasks.length === 1 ? '' : 's'} from “${bucket.title}”? This can’t be undone.`)) {
+      clearBucket(bucket.id);
+    }
+  };
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div className="group/lane flex min-h-0 flex-1 flex-col">
       <div className="mb-3 flex items-center justify-between px-1">
         <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-faint">
           <span className="size-2 rounded-full" style={{ background: bucket.color }} />
           {bucket.title}
         </span>
-        <span className="grid size-5 min-w-5 place-items-center rounded-full bg-card2 text-[10px] font-medium text-dim">
-          {tasks.length}
-        </span>
+        <div className="flex items-center gap-1.5">
+          {tasks.length > 0 && (
+            <button
+              onClick={clear}
+              title={`Clear ${bucket.title}`}
+              aria-label={`Clear ${bucket.title}`}
+              className="text-faint opacity-0 transition-opacity hover:text-[var(--color-pri-high)] group-hover/lane:opacity-100"
+            >
+              <Eraser size={13} />
+            </button>
+          )}
+          <span className="grid size-5 min-w-5 place-items-center rounded-full bg-card2 text-[10px] font-medium text-dim">
+            {tasks.length}
+          </span>
+        </div>
       </div>
       <QuickAdd bucketId={bucket.id} />
       <div

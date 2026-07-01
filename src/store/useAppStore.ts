@@ -91,6 +91,7 @@ interface AppState extends PersistedState {
   moveTask: (id: string, bucketId: string) => void;
   deleteTask: (id: string) => void;
   clearDone: () => void;
+  clearBucket: (bucketId: string) => void;
 
   // ── checklist ──
   addChecklistItem: (taskId: string, text: string) => void;
@@ -288,6 +289,11 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   clearDone: () => {
     set((s) => ({ tasks: s.tasks.filter((t) => !t.done) }));
+    get()._sync();
+  },
+
+  clearBucket: (bucketId) => {
+    set((s) => ({ tasks: s.tasks.filter((t) => t.bucketId !== bucketId) }));
     get()._sync();
   },
 

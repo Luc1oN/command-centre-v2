@@ -14,6 +14,7 @@ export function DashboardBoard() {
   const updateTask = useAppStore((s) => s.updateTask);
   const toggleTask = useAppStore((s) => s.toggleTask);
   const deleteTask = useAppStore((s) => s.deleteTask);
+  const clearBucket = useAppStore((s) => s.clearBucket);
   const addChecklistItem = useAppStore((s) => s.addChecklistItem);
   const toggleChecklistItem = useAppStore((s) => s.toggleChecklistItem);
   const deleteChecklistItem = useAppStore((s) => s.deleteChecklistItem);
@@ -28,12 +29,13 @@ export function DashboardBoard() {
       updateTask,
       toggleTask,
       deleteTask,
+      clearBucket,
       addChecklistItem,
       toggleChecklistItem,
       deleteChecklistItem,
     }),
     // actions are stable zustand refs; re-build only when data changes
-    [buckets, tasks, ready, moveTask, addTask, updateTask, toggleTask, deleteTask, addChecklistItem, toggleChecklistItem, deleteChecklistItem],
+    [buckets, tasks, ready, moveTask, addTask, updateTask, toggleTask, deleteTask, clearBucket, addChecklistItem, toggleChecklistItem, deleteChecklistItem],
   );
 
   return (
