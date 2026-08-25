@@ -67,6 +67,10 @@ export function normalise(raw: Partial<PersistedState> | null | undefined): Pers
     notes: Array.isArray(raw.notes) ? raw.notes : [],
     trips: Array.isArray(raw.trips) ? raw.trips : [],
     tennis: Array.isArray(raw.tennis) ? raw.tennis : [],
+    rhythm:
+      raw.rhythm && typeof raw.rhythm === 'object'
+        ? { log: raw.rhythm.log ?? {}, focus: raw.rhythm.focus ?? {} }
+        : { log: {}, focus: {} },
   };
 
   const validBucketIds = new Set(state.buckets.map((b) => b.id));

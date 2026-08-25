@@ -9,7 +9,7 @@ import { create } from 'zustand';
 
 export type ThemeId = 'aurora' | 'mint' | 'ember' | 'violet';
 export type Mode = 'dark' | 'light';
-export type HudView = 'dashboard' | 'projects' | 'braindump';
+export type HudView = 'dashboard' | 'projects' | 'braindump' | 'rhythm';
 export type LaneId = 'todo' | 'prog' | 'done';
 export type Priority = 'high' | 'med' | 'low';
 export type BookmarkMode = 'work' | 'personal';

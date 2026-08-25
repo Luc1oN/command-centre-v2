@@ -27,6 +27,7 @@ import type {
   Category,
   RecurRule,
   ChecklistItem,
+  FocusItem,
 } from '@/types';
 import { emptyState, DEFAULT_BUCKETS } from '@/types';
 import { persist, loadInitial } from '@/lib/supabase';
@@ -124,6 +125,12 @@ interface AppState extends PersistedState {
   addTournament: (t: Omit<Tournament, 'id'>) => void;
   deleteTournament: (id: string) => void;
   addNote: (n: Omit<Note, 'id'>) => void;
+
+  // ── weekly rhythm ──
+  /** Toggle a ritual as done/undone for a given ISO date. */
+  toggleRitual: (ritualId: string, dateISO: string) => void;
+  /** Set the "3 meaningful things" for a given ISO date. */
+  setFocus: (dateISO: string, items: FocusItem[]) => void;
 }
 
 // ── store ───────────────────────────────────────────────────
@@ -160,6 +167,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       notes: s.notes,
       trips: s.trips,
       tennis: s.tennis,
+      rhythm: s.rhythm,
     };
     persist(slice);
   },
@@ -470,6 +478,21 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   addNote: (n) => {
     set((s) => ({ notes: [...s.notes, { id: uid(), ...n }] }));
+    get()._sync();
+  },
+
+  // ── weekly rhythm ──
+  toggleRitual: (ritualId, dateISO) => {
+    set((s) => {
+      const dates = s.rhythm.log[ritualId] ?? [];
+      const nextDates = dates.includes(dateISO) ? dates.filter((d) => d !== dateISO) : [...dates, dateISO];
+      return { rhythm: { ...s.rhythm, log: { ...s.rhythm.log, [ritualId]: nextDates } } };
+    });
+    get()._sync();
+  },
+
+  setFocus: (dateISO, items) => {
+    set((s) => ({ rhythm: { ...s.rhythm, focus: { ...s.rhythm.focus, [dateISO]: items } } }));
     get()._sync();
   },
 }));

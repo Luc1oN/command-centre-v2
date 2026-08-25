@@ -1,4 +1,4 @@
-import { LayoutDashboard, FolderKanban, Sparkles } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, Sparkles, Repeat } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useHud } from '@/store';
 import type { HudView } from '@/store';
@@ -6,9 +6,11 @@ import { DashboardBoard } from './DashboardBoard';
 import { ProjectsView } from './ProjectsView';
 import { ProjectBoard } from './ProjectBoard';
 import { BrainDump } from './BrainDump';
+import { RhythmView } from './RhythmView';
 
 const TABS: { id: HudView; label: string; icon: LucideIcon }[] = [
   { id: 'dashboard', label: 'Board', icon: LayoutDashboard },
+  { id: 'rhythm', label: 'Rhythm', icon: Repeat },
   { id: 'projects', label: 'Projects', icon: FolderKanban },
   { id: 'braindump', label: 'Brain Dump', icon: Sparkles },
 ];
@@ -42,6 +44,7 @@ export function Workspace() {
 
       <div className="flex min-h-0 flex-1">
         {view === 'dashboard' && <DashboardBoard />}
+        {view === 'rhythm' && <RhythmView />}
         {view === 'projects' && (activeProjectId ? <ProjectBoard projectId={activeProjectId} /> : <ProjectsView />)}
         {view === 'braindump' && <BrainDump />}
       </div>

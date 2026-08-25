@@ -165,6 +165,23 @@ export interface Tournament {
   notes?: string;
 }
 
+// ── Weekly rhythm (routine tracking) ────────────────────────
+//  The routine STRUCTURE is a code constant (src/data/routine.ts);
+//  only the user's progress lives here and syncs via Supabase.
+
+export interface FocusItem {
+  id: string;
+  text: string;
+  done: boolean;
+}
+
+export interface RhythmState {
+  /** ritualId → ISO dates it was completed (drives weekly-target progress). */
+  log: Record<string, string[]>;
+  /** ISO date → the day's "3 meaningful things". */
+  focus: Record<string, FocusItem[]>;
+}
+
 // ── The complete persisted state (the Supabase JSON blob) ───
 //  This is EXACTLY what lives in dashboard.data — read on load,
 //  written on every change.
@@ -178,6 +195,7 @@ export interface PersistedState {
   notes: Note[];
   trips: Trip[];
   tennis: Tournament[];
+  rhythm: RhythmState;
 }
 
 // ── Local-only state (localStorage, NOT synced to Supabase) ─
@@ -273,5 +291,6 @@ export function emptyState(): PersistedState {
     notes: [],
     trips: [],
     tennis: [],
+    rhythm: { log: {}, focus: {} },
   };
 }
