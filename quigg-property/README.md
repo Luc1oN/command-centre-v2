@@ -13,7 +13,7 @@ A standalone static website for Quigg Property (Cork estate agents), built with 
 - `assets/script.js` — Mobile nav toggle, listings filter, static form handling
 - `assets/footer.js` — Shared footer markup injected on every page
 - `assets/listings-data.js` — Sample property data (swap for a real feed/CMS later)
-- `assets/logo.svg` — Vector recreation of the Quigg Property lighthouse mark
+- `assets/logo-mark.png`, `assets/logo-lockup-on-dark.png`, `assets/logo-lockup-on-light.png` — Official Quigg Property logo assets, extracted from the supplied master vector file
 
 ## Branding
 
