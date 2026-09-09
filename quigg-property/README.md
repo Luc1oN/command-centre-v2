@@ -41,5 +41,6 @@ Then open http://localhost:8080
 
 - Swap `assets/listings-data.js` for a real property feed (MyHome.ie/Daft API, CMS, or Supabase table)
 - Replace stock Unsplash imagery with real property and team photography
+- **The homepage hero (`assets/styles.css`, `.hero` background) uses `source.unsplash.com`, a keyword-based redirect ("cork, harbour, ireland, coastal, house") rather than one fixed, verified photo.** It was set this way because the build environment has no outbound access to image hosts to browse/verify a specific photo. Confirm it renders correctly in a real browser and swap in a chosen, licensed photo of a Cork Harbour property before launch.
 - Wire the contact form to a real email/CRM endpoint
 - Add a proper sitemap.xml/robots.txt and analytics before going live
